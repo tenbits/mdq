@@ -1,0 +1,117 @@
+{
+    "name": "mdrun",
+    "description": "Scriptable markdown files",
+    "version": "0.0.1",
+    "main": "./lib/mdrun.js",
+    "bin": {
+        "mdrun": "index.js"
+    },
+    "author": {
+        "name": "Alex Kit",
+        "email": "alex.kit@atmajs.com"
+    },
+    "dependencies": {
+        "alot": "^0.3.3",
+        "appcfg": "^0.4.69",
+        "atma-io": "^1.2.65",
+        "atma-utils": "^0.2.60",
+        "markdown-json": "^1.6.1",
+        "ruta": "^0.2.71",
+        "shellbee": "^0.5.26",
+        "sshly": "^0.0.1",
+        "tree-kill": "^1.2.2",
+        "yamljs": "^0.3.0"
+    },
+    "devDependencies": {
+        "@types/node": "^12.6.2",
+        "app-bundler": "^0.1.2",
+        "atma": "^0.15.17",
+        "atma-loader-ts": "^1.1.17",
+        "dts-bundle": "^0.7.3",
+        "typescript": "^4.4.3"
+    },
+    "scripts": {
+        "build": "app-bundler && npm run dts",
+        "dts": "tsc -p tsconfig-build.json && atma run tools/build-dts",
+        "watch": "app-bundler -watch",
+        "release": "echo \"Run atma pub -m \"message\"\"",
+        "test": "atma test",
+        "server": "atma server"
+    },
+    "app-bundler": {
+        "apps": {
+            "cli": {
+                "file": "src/cli.ts",
+                "outputMain": "lib/cli.js"
+            },
+            "module": {
+                "file": "src/export.ts",
+                "outputMain": "lib/mdrun.js"
+            }
+        },
+        "common": {
+            "package": {
+                "module": "commonjs",
+                "commonjs": {
+                    "output": "simplified"
+                }
+            },
+            "extensions": {
+                "io": {
+                    "type": "js"
+                }
+            },
+            "defaultExtensions": {
+                "js": "ts"
+            },
+            "dynamicDependencies": [
+                "atma-io",
+                "alot",
+                "atma-utils",
+                "^path$",
+                "^vm$",
+                "^yamljs$",
+                "^shellbee$",
+                "^sshly$",
+                "^atma-io$",
+                "child_process",
+                "tree-kill"
+            ],
+            "middlewares": {
+                "ts": [
+                    "atma-loader-ts:read"
+                ]
+            }
+        }
+    },
+    "atma": {
+        "plugins": [
+            "atma-loader-ts"
+        ],
+        "settings": {
+            "include": {
+                "amd": true,
+                "extentionDefault": {
+                    "js": "ts"
+                }
+            },
+            "atma-loader-ts": {
+                "extensions": [
+                    "ts",
+                    "test"
+                ],
+                "typescript": {
+                    "compilerOptions": {
+                        "#if (TEST)": {
+                            "module": "AMD"
+                        },
+                        "#if (!TEST)": {
+                            "module": "CommonJS"
+                        },
+                        "sourceMap": false
+                    }
+                }
+            }
+        }
+    }
+}
