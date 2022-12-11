@@ -43,5 +43,12 @@ echo $name
 
         deepEq_(blocks[2].logs, [ 'Lorem value IPSUM' ]);
         eq_(blocks[2].result, 1);
+    },
+    async 'javascript executor with modules' () {
+
+        let runner = new Runner();
+
+        await runner.executeFile('./test/fixtures/modules.md');
+        eq_(process.env.IDX, 1);
     }
 })

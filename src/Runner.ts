@@ -79,7 +79,6 @@ export class Runner {
         let config = await this.config();
         let env = config.toJSON();
 
-
         let executables = blocks.filter(x => x.type === 'code') as ICodeBlock[];
         let logEntries = [];
         for (let i = 0; i < executables.length; i++) {
